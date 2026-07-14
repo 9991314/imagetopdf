@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#14384b" />
+  <title>印成册 - 图片转 PDF</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="印成册">
+        <div class="brand-mark" aria-hidden="true"><i data-lucide="book-open"></i></div>
+        <div><div class="brand-name">印成册</div><div class="brand-sub">Image to PDF studio</div></div>
+      </div>
+      <div class="privacy-note"><i data-lucide="shield-check" aria-hidden="true"></i><span>图片只在当前设备处理</span></div>
+    </header>
+
+    <div class="workspace">
+      <section class="queue-area" aria-labelledby="mainTitle">
+        <div class="eyebrow">Local image assembly</div>
+        <h1 id="mainTitle">把图片整理成一份好读的 PDF。</h1>
+        <p class="intro">选择图片，调整页序与方向，然后一次导出。无需注册，文件不会离开你的浏览器。</p>
+
+        <div class="queue-header">
+          <h2 class="section-title">页面队列</h2>
+          <span class="file-count" id="fileCount">0 张图片</span>
+        </div>
+
+        <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="选择图片或拖放图片到此处">
+          <div>
+            <div class="drop-icon"><i data-lucide="images" aria-hidden="true"></i></div>
+            <h2>从这里开始整理</h2>
+            <p>拖放 JPG、PNG、WebP 或 GIF 图片到这里</p>
+            <button class="primary-button" type="button" id="selectButton"><i data-lucide="plus" aria-hidden="true"></i>添加图片</button>
+          </div>
+        </div>
+        <input id="fileInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple />
+
+        <div class="image-list" id="imageList" aria-live="polite"></div>
+        <div class="queue-footer" id="queueFooter" hidden>
+          <span class="queue-help"><i data-lucide="grip-vertical" aria-hidden="true"></i>拖动左侧手柄调整页面顺序</span>
+          <button class="secondary-button" type="button" id="addMoreButton"><i data-lucide="plus" aria-hidden="true"></i>继续添加</button>
+        </div>
+      </section>
+
+      <aside class="settings-panel" aria-labelledby="settingsTitle">
+        <div class="settings-heading">
+          <h2 id="settingsTitle">PDF 设置</h2>
+          <p>这些设置将应用到所有页面</p>
+        </div>
+        <div class="settings-body">
+          <div class="field">
+            <label for="pageSize">纸张尺寸</label>
+            <select id="pageSize">
+              <option value="a4">A4 (210 × 297 mm)</option>
+              <option value="letter">Letter (216 × 279 mm)</option>
+              <option value="a5">A5 (148 × 210 mm)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>页面方向</label>
+            <div class="segmented" role="radiogroup" aria-label="页面方向">
+              <label><input type="radio" name="orientation" value="auto" checked /><span>自动</span></label>
+              <label><input type="radio" name="orientation" value="portrait" /><span>纵向</span></label>
+              <label><input type="radio" name="orientation" value="landscape" /><span>横向</span></label>
+            </div>
+          </div>
+          <div class="field">
+            <label>图片适配</label>
+            <div class="segmented" role="radiogroup" aria-label="图片适配">
+              <label><input type="radio" name="fit" value="contain" checked /><span>完整显示</span></label>
+              <label><input type="radio" name="fit" value="cover" /><span>填满裁切</span></label>
+              <label><input type="radio" name="fit" value="stretch" /><span>拉伸填满</span></label>
+            </div>
+          </div>
+          <div class="two-fields">
+            <div class="field compact">
+              <label for="margin">页边距</label>
+              <div class="unit-wrap"><input id="margin" type="number" min="0" max="50" value="10" /><span class="unit">mm</span></div>
+            </div>
+            <div class="field compact">
+              <label for="pdfName">文件名称</label>
+              <input id="pdfName" type="text" maxlength="60" value="我的图片文档" />
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="pdf-preview" aria-live="polite">
+            <div class="page-mini" id="pageMini">0</div>
+            <div><div class="preview-label" id="previewLabel">等待添加图片</div><div class="preview-detail" id="previewDetail">A4 · 自动方向 · 10 mm 边距</div></div>
+          </div>
+          <button class="primary-button export-button" id="exportButton" type="button" disabled><i data-lucide="download" aria-hidden="true"></i>导出 PDF</button>
+          <p class="error-message" id="errorMessage" role="alert"></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <div class="status-message" id="statusMessage" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
